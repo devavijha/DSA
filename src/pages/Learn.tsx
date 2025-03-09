@@ -1,27 +1,35 @@
-import React from 'react';
-import { BookOpen, Play, Star, Clock } from 'lucide-react';
+import { BookOpen, Play, Star, Clock, CheckCircle, FileText, Code } from 'lucide-react';
 
 const courses = [
   {
     title: 'Data Structures Fundamentals',
-    description: 'Learn the essential data structures used in programming',
+    description: 'Learn the essential data structures used in programming.',
     duration: '4 hours',
     level: 'Beginner',
-    modules: 12
+    modules: 12,
+    quiz: true,
+    codingChallenge: true,
+    resources: true
   },
   {
     title: 'Algorithm Design',
-    description: 'Master common algorithmic patterns and techniques',
+    description: 'Master common algorithmic patterns and techniques.',
     duration: '6 hours',
     level: 'Intermediate',
-    modules: 15
+    modules: 15,
+    quiz: true,
+    codingChallenge: true,
+    resources: true
   },
   {
     title: 'Dynamic Programming',
-    description: 'Deep dive into dynamic programming concepts',
+    description: 'Deep dive into dynamic programming concepts.',
     duration: '8 hours',
     level: 'Advanced',
-    modules: 20
+    modules: 20,
+    quiz: true,
+    codingChallenge: true,
+    resources: true
   }
 ];
 
@@ -31,7 +39,7 @@ export default function Learn() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Learning Path</h1>
-          <p className="text-secondary mt-2">Master algorithms and data structures step by step</p>
+          <p className="text-secondary mt-2">Master algorithms and data structures step by step with hands-on exercises.</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 transition-colors">
           <Play className="w-4 h-4" />
@@ -50,7 +58,7 @@ export default function Learn() {
             </div>
             <h3 className="text-xl font-semibold text-foreground mb-2">{course.title}</h3>
             <p className="text-secondary mb-4">{course.description}</p>
-            <div className="flex items-center gap-4 text-sm text-secondary">
+            <div className="flex items-center gap-4 text-sm text-secondary mb-4">
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
                 <span>{course.duration}</span>
@@ -59,6 +67,26 @@ export default function Learn() {
                 <BookOpen className="w-4 h-4" />
                 <span>{course.modules} modules</span>
               </div>
+            </div>
+            <div className="space-y-2">
+              {course.quiz && (
+                <div className="flex items-center gap-2 text-sm text-foreground">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span>Quiz available</span>
+                </div>
+              )}
+              {course.codingChallenge && (
+                <div className="flex items-center gap-2 text-sm text-foreground">
+                  <Code className="w-4 h-4 text-blue-500" />
+                  <span>Coding challenges included</span>
+                </div>
+              )}
+              {course.resources && (
+                <div className="flex items-center gap-2 text-sm text-foreground">
+                  <FileText className="w-4 h-4 text-yellow-500" />
+                  <span>Additional learning resources</span>
+                </div>
+              )}
             </div>
           </div>
         ))}
