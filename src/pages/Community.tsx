@@ -1,11 +1,10 @@
-import React from 'react';
 import { Users, MessageSquare, ThumbsUp, Share2 } from 'lucide-react';
 
 const discussions = [
   {
     title: 'Tips for Dynamic Programming',
     author: 'Sarah Chen',
-    content: 'Here are some key patterns I've noticed while solving DP problems...',
+    content: "Here are some key patterns I've noticed while solving DP problems...",
     likes: 45,
     replies: 12,
     tags: ['dynamic-programming', 'algorithms', 'tips']
@@ -13,7 +12,7 @@ const discussions = [
   {
     title: 'Help with Graph Traversal Problem',
     author: 'Mike Johnson',
-    content: 'I'm stuck on implementing DFS for this specific problem...',
+    content: 'I\'m stuck on implementing DFS for this specific problem...',
     likes: 23,
     replies: 8,
     tags: ['graphs', 'dfs', 'help-wanted']
@@ -21,7 +20,7 @@ const discussions = [
   {
     title: 'Weekly Contest Discussion',
     author: 'Alex Kumar',
-    content: 'Let's discuss the solutions from this week's contest...',
+    content: 'Let\'s discuss the solutions from this week\'s contest...',
     likes: 67,
     replies: 34,
     tags: ['contest', 'solutions', 'discussion']
