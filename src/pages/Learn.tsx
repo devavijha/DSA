@@ -1,45 +1,51 @@
-import { BookOpen, Play, Star, Clock, CheckCircle, FileText, Code } from 'lucide-react';
+import { BookOpen, Play, Clock, CheckCircle, Code, List } from 'lucide-react';
+import { useState } from 'react';
 
 const courses = [
   {
     title: 'Data Structures Fundamentals',
-    description: 'Learn the essential data structures used in programming.',
-    duration: '4 hours',
+    description: 'Learn the essential data structures used in programming',
+    duration: '6 hours',
     level: 'Beginner',
-    modules: 12,
-    quiz: true,
-    codingChallenge: true,
-    resources: true
+    modules: 15,
+    topics: ['Arrays', 'Linked Lists', 'Stacks & Queues', 'Hash Tables', 'Trees', 'Graphs'],
   },
   {
     title: 'Algorithm Design',
-    description: 'Master common algorithmic patterns and techniques.',
-    duration: '6 hours',
+    description: 'Master common algorithmic patterns and techniques',
+    duration: '8 hours',
     level: 'Intermediate',
-    modules: 15,
-    quiz: true,
-    codingChallenge: true,
-    resources: true
+    modules: 18,
+    topics: ['Sorting & Searching', 'Recursion', 'Backtracking', 'Divide & Conquer', 'Greedy Algorithms'],
   },
   {
     title: 'Dynamic Programming',
-    description: 'Deep dive into dynamic programming concepts.',
-    duration: '8 hours',
+    description: 'Deep dive into dynamic programming concepts',
+    duration: '10 hours',
     level: 'Advanced',
-    modules: 20,
-    quiz: true,
-    codingChallenge: true,
-    resources: true
+    modules: 22,
+    topics: ['Memoization', 'Tabulation', 'Fibonacci Variations', 'Knapsack Problem', 'Longest Common Subsequence'],
   }
 ];
 
 export default function Learn() {
+  interface Course {
+    title: string;
+    description: string;
+    duration: string;
+    level: string;
+    modules: number;
+    topics: string[];
+  }
+  
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Learning Path</h1>
-          <p className="text-secondary mt-2">Master algorithms and data structures step by step with hands-on exercises.</p>
+          <p className="text-secondary mt-2">Master data structures and algorithms step by step</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 transition-colors">
           <Play className="w-4 h-4" />
@@ -49,7 +55,11 @@ export default function Learn() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course, index) => (
-          <div key={index} className="bg-card rounded-lg p-6 hover:bg-card-hover transition-colors">
+          <div 
+            key={index} 
+            className="bg-card rounded-lg p-6 hover:bg-card-hover transition-colors cursor-pointer"
+            onClick={() => setSelectedCourse(course)}
+          >
             <div className="flex items-start justify-between mb-4">
               <BookOpen className="w-8 h-8 text-accent-blue" />
               <span className="px-3 py-1 bg-accent-blue/10 text-accent-blue rounded-full text-sm">
@@ -58,7 +68,7 @@ export default function Learn() {
             </div>
             <h3 className="text-xl font-semibold text-foreground mb-2">{course.title}</h3>
             <p className="text-secondary mb-4">{course.description}</p>
-            <div className="flex items-center gap-4 text-sm text-secondary mb-4">
+            <div className="flex items-center gap-4 text-sm text-secondary">
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
                 <span>{course.duration}</span>
@@ -68,59 +78,32 @@ export default function Learn() {
                 <span>{course.modules} modules</span>
               </div>
             </div>
-            <div className="space-y-2">
-              {course.quiz && (
-                <div className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>Quiz available</span>
-                </div>
-              )}
-              {course.codingChallenge && (
-                <div className="flex items-center gap-2 text-sm text-foreground">
-                  <Code className="w-4 h-4 text-blue-500" />
-                  <span>Coding challenges included</span>
-                </div>
-              )}
-              {course.resources && (
-                <div className="flex items-center gap-2 text-sm text-foreground">
-                  <FileText className="w-4 h-4 text-yellow-500" />
-                  <span>Additional learning resources</span>
-                </div>
-              )}
-            </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-card rounded-lg p-8">
-        <div className="flex items-center gap-4 mb-6">
-          <Star className="w-12 h-12 text-accent-yellow" />
-          <div>
-            <h2 className="text-2xl font-bold text-foreground">Your Progress</h2>
-            <p className="text-secondary">Keep going! You're doing great.</p>
+      {selectedCourse && (
+        <div className="bg-card rounded-lg p-8 mt-6">
+          <h2 className="text-2xl font-bold text-foreground">{selectedCourse.title} - Topics</h2>
+          <ul className="mt-4 space-y-2">
+            {selectedCourse.topics.map((topic, index) => (
+              <li key={index} className="flex items-center gap-2 text-secondary">
+                <CheckCircle className="w-5 h-5 text-accent-green" /> {topic}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6 flex gap-4">
+            <button className="flex items-center gap-2 px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-accent-green/90 transition-colors">
+              <Code className="w-4 h-4" />
+              Start Coding Exercises
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2 bg-accent-yellow text-white rounded-lg hover:bg-accent-yellow/90 transition-colors">
+              <List className="w-4 h-4" />
+              Take a Quiz
+            </button>
           </div>
         </div>
-        <div className="space-y-4">
-          <div>
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-secondary">Overall Progress</span>
-              <span className="text-foreground">45%</span>
-            </div>
-            <div className="h-2 bg-card-hover rounded-full">
-              <div className="h-full w-[45%] bg-accent-blue rounded-full" />
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-secondary">Current Course</span>
-              <span className="text-foreground">60%</span>
-            </div>
-            <div className="h-2 bg-card-hover rounded-full">
-              <div className="h-full w-[60%] bg-accent-green rounded-full" />
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
