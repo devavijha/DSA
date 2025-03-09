@@ -87,9 +87,9 @@ export default function Community() {
             <h3 className="text-lg font-semibold text-foreground mb-4">Top Contributors</h3>
             <div className="space-y-4">
               {[
-                { name: 'Sarah Chen', points: 1250, rank: 1 },
-                { name: 'Alex Kumar', points: 980, rank: 2 },
-                { name: 'Mike Johnson', points: 845, rank: 3 }
+                { name: 'Abhishek Jha', points: 1250, rank: 1 },
+                { name: 'Nirajan', points: 980, rank: 2 },
+                { name: 'Rajan', points: 845, rank: 3 }
               ].map((user, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
