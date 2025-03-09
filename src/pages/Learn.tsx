@@ -1,64 +1,64 @@
-import { BookOpen, Play, Clock, CheckCircle, Code, List } from 'lucide-react';
-import { useState } from 'react';
+import { useState } from "react";
+import { BookOpen, Play, Clock, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const courses = [
   {
-    title: 'Data Structures Fundamentals',
-    description: 'Learn the essential data structures used in programming',
-    duration: '6 hours',
-    level: 'Beginner',
+    title: "Data Structures Fundamentals",
+    description: "Learn the essential data structures used in programming",
+    duration: "4 hours",
+    level: "Beginner",
+    modules: 12,
+    topics: ["Arrays", "Linked Lists", "Stacks", "Queues", "Hash Tables"],
+  },
+  {
+    title: "Algorithm Design",
+    description: "Master common algorithmic patterns and techniques",
+    duration: "6 hours",
+    level: "Intermediate",
     modules: 15,
-    topics: ['Arrays', 'Linked Lists', 'Stacks & Queues', 'Hash Tables', 'Trees', 'Graphs'],
+    topics: ["Sorting", "Searching", "Recursion", "Divide & Conquer"],
   },
   {
-    title: 'Algorithm Design',
-    description: 'Master common algorithmic patterns and techniques',
-    duration: '8 hours',
-    level: 'Intermediate',
-    modules: 18,
-    topics: ['Sorting & Searching', 'Recursion', 'Backtracking', 'Divide & Conquer', 'Greedy Algorithms'],
+    title: "Dynamic Programming",
+    description: "Deep dive into dynamic programming concepts",
+    duration: "8 hours",
+    level: "Advanced",
+    modules: 20,
+    topics: ["Memoization", "Tabulation", "Graph DP", "Knapsack Problem"],
   },
-  {
-    title: 'Dynamic Programming',
-    description: 'Deep dive into dynamic programming concepts',
-    duration: '10 hours',
-    level: 'Advanced',
-    modules: 22,
-    topics: ['Memoization', 'Tabulation', 'Fibonacci Variations', 'Knapsack Problem', 'Longest Common Subsequence'],
-  }
 ];
 
 export default function Learn() {
-  interface Course {
-    title: string;
-    description: string;
-    duration: string;
-    level: string;
-    modules: number;
-    topics: string[];
-  }
-  
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [currentCourse, setCurrentCourse] = useState<typeof courses[0] | null>(null);
 
   return (
     <div className="space-y-8 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Learning Path</h1>
-          <p className="text-secondary mt-2">Master data structures and algorithms step by step</p>
+          <p className="text-secondary mt-2">Master algorithms and data structures step by step</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 transition-colors">
-          <Play className="w-4 h-4" />
-          Continue Learning
-        </button>
+        {currentCourse ? (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => alert(`Resuming ${currentCourse.title}`)}
+            className="flex items-center gap-2 px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 transition-colors"
+          >
+            <Play className="w-4 h-4" /> Continue Learning
+          </motion.button>
+        ) : null}
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course, index) => (
-          <div 
-            key={index} 
+          <motion.div
+            key={index}
             className="bg-card rounded-lg p-6 hover:bg-card-hover transition-colors cursor-pointer"
-            onClick={() => setSelectedCourse(course)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setCurrentCourse(course)}
           >
             <div className="flex items-start justify-between mb-4">
               <BookOpen className="w-8 h-8 text-accent-blue" />
@@ -78,31 +78,22 @@ export default function Learn() {
                 <span>{course.modules} modules</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      {selectedCourse && (
-        <div className="bg-card rounded-lg p-8 mt-6">
-          <h2 className="text-2xl font-bold text-foreground">{selectedCourse.title} - Topics</h2>
-          <ul className="mt-4 space-y-2">
-            {selectedCourse.topics.map((topic, index) => (
-              <li key={index} className="flex items-center gap-2 text-secondary">
-                <CheckCircle className="w-5 h-5 text-accent-green" /> {topic}
+      {currentCourse && (
+        <motion.div className="bg-card rounded-lg p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <h2 className="text-2xl font-bold text-foreground">{currentCourse.title}</h2>
+          <p className="text-secondary mb-4">{currentCourse.description}</p>
+          <ul className="list-disc list-inside text-foreground">
+            {currentCourse.topics.map((topic, i) => (
+              <li key={i} className="flex items-center gap-2">
+                <ChevronRight className="w-4 h-4 text-accent-blue" /> {topic}
               </li>
             ))}
           </ul>
-          <div className="mt-6 flex gap-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-accent-green/90 transition-colors">
-              <Code className="w-4 h-4" />
-              Start Coding Exercises
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-accent-yellow text-white rounded-lg hover:bg-accent-yellow/90 transition-colors">
-              <List className="w-4 h-4" />
-              Take a Quiz
-            </button>
-          </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
