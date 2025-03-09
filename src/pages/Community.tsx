@@ -3,7 +3,7 @@ import { Users, MessageSquare, ThumbsUp, Share2 } from 'lucide-react';
 const discussions = [
   {
     title: 'Tips for Dynamic Programming',
-    author: 'Sarah Chen',
+    author: 'Abhishek Jha',
     content: "Here are some key patterns I've noticed while solving DP problems...",
     likes: 45,
     replies: 12,
@@ -11,7 +11,7 @@ const discussions = [
   },
   {
     title: 'Help with Graph Traversal Problem',
-    author: 'Mike Johnson',
+    author: 'Nirajan',
     content: 'I\'m stuck on implementing DFS for this specific problem...',
     likes: 23,
     replies: 8,
@@ -19,7 +19,7 @@ const discussions = [
   },
   {
     title: 'Weekly Contest Discussion',
-    author: 'Alex Kumar',
+    author: 'Rajan',
     content: 'Let\'s discuss the solutions from this week\'s contest...',
     likes: 67,
     replies: 34,
