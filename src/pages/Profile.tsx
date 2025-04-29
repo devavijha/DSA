@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { Trophy, Star, Clock } from 'lucide-react';
@@ -21,24 +21,19 @@ interface Submission {
 }
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user: authUser } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-      fetchSubmissions();
-    }
-  }, [user]);
-
-  async function fetchProfile() {
+  const fetchProfile = useCallback(async () => {
+    if (!authUser) return;
+    
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user?.id)
+        .eq('id', authUser.id)
         .single();
 
       if (error) throw error;
@@ -46,14 +41,16 @@ export default function Profile() {
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
-  }
+  }, [authUser]);
 
-  async function fetchSubmissions() {
+  const fetchSubmissions = useCallback(async () => {
+    if (!authUser) return;
+    
     try {
       const { data, error } = await supabase
         .from('submissions')
         .select('*, problem:problems(title, difficulty)')
-        .eq('user_id', user?.id)
+        .eq('user_id', authUser.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -63,7 +60,14 @@ export default function Profile() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [authUser]);
+
+  useEffect(() => {
+    if (authUser) {
+      fetchProfile();
+      fetchSubmissions();
+    }
+  }, [authUser, fetchProfile, fetchSubmissions]);
 
   if (loading) {
     return <div className="text-center py-8">Loading profile...</div>;

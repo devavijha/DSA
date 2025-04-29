@@ -1,5 +1,10 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from 'react';
 import { Trophy, Calendar, Users, Clock, ArrowRight } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
+import { toast } from 'react-hot-toast';
+// Add to package.json: "react-hot-toast": "^2.4.1"
+// Run: npm install react-hot-toast
 
 const contests = [
   {
@@ -28,7 +33,50 @@ const contests = [
   }
 ];
 
+export interface Contest {
+  id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  participants: number;
+  duration: string;
+  difficulty: 'Easy' | 'Intermediate' | 'Advanced';
+  registeredUsers?: string[];
+}
+
 export default function Contests() {
+  const { user } = useAuth();
+  const [registeredContests, setRegisteredContests] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async (contestId: string) => {
+    if (!user) {
+      toast.error('Please login to register for contests');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Add registration logic here
+      const response = await fetch('/api/contests/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ contestId, userId: user.id }),
+      });
+
+      if (!response.ok) throw new Error('Failed to register');
+      
+      setRegisteredContests(prev => [...prev, contestId]);
+      toast.success('Successfully registered for the contest!');
+    } catch (_) {
+      toast.error('Failed to register for the contest');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -43,13 +91,14 @@ export default function Contests() {
       </div>
 
       <div className="grid gap-6">
-        {contests.map((contest, index) => {
+        {contests.map((contest) => {
           const startDate = new Date(contest.startDate);
           const isUpcoming = startDate > new Date();
+          const isRegistered = registeredContests.includes(contest.title); // Using title as unique identifier since id is not available
 
           return (
             <div
-              key={index}
+              key={contest.title}
               className="bg-card rounded-lg p-6 hover:bg-card-hover transition-colors"
             >
               <div className="flex items-start justify-between">
@@ -89,16 +138,26 @@ export default function Contests() {
                 <button
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                     isUpcoming
-                      ? 'bg-accent-blue text-white hover:bg-accent-blue/90'
+                      ? isRegistered
+                        ? 'bg-accent-green text-white hover:bg-accent-green/90'
+                        : 'bg-accent-blue text-white hover:bg-accent-blue/90'
                       : 'bg-card-hover text-secondary'
                   }`}
-                  disabled={!isUpcoming}
+                  disabled={!isUpcoming || loading}
+                  onClick={() => handleRegister(contest.title)}
                 >
                   {isUpcoming ? (
-                    <>
-                      Register Now
-                      <ArrowRight className="w-4 h-4" />
-                    </>
+                    isRegistered ? (
+                      <>
+                        Registered
+                        <Trophy className="w-4 h-4" />
+                      </>
+                    ) : (
+                      <>
+                        Register Now
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )
                   ) : (
                     'Ended'
                   )}
@@ -109,29 +168,48 @@ export default function Contests() {
         })}
       </div>
 
-      <div className="bg-card rounded-lg p-8">
-        <div className="flex items-center gap-4 mb-6">
-          <Trophy className="w-12 h-12 text-accent-yellow" />
-          <div>
-            <h2 className="text-2xl font-bold text-foreground">Your Contest Stats</h2>
-            <p className="text-secondary">Track your competitive programming journey</p>
+      {user && (
+        <div className="bg-card rounded-lg p-8">
+          <div className="flex items-center gap-4 mb-6">
+            <Trophy className="w-12 h-12 text-accent-yellow" />
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Your Contest Stats</h2>
+              <p className="text-secondary">Track your competitive programming journey</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-card-hover rounded-lg p-4">
+              <div className="text-3xl font-bold text-accent-blue mb-2">
+                {registeredContests.length}
+              </div>
+              <div className="text-secondary">Upcoming Contests</div>
+            </div>
+            <div className="bg-card-hover rounded-lg p-4">
+              <div className="text-3xl font-bold text-accent-green mb-2">1,240</div>
+              <div className="text-secondary">Global Ranking</div>
+            </div>
+            <div className="bg-card-hover rounded-lg p-4">
+              <div className="text-3xl font-bold text-accent-purple mb-2">85%</div>
+              <div className="text-secondary">Average Score</div>
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-card-hover rounded-lg p-4">
-            <div className="text-3xl font-bold text-accent-blue mb-2">12</div>
-            <div className="text-secondary">Contests Participated</div>
-          </div>
-          <div className="bg-card-hover rounded-lg p-4">
-            <div className="text-3xl font-bold text-accent-green mb-2">1,240</div>
-            <div className="text-secondary">Global Ranking</div>
-          </div>
-          <div className="bg-card-hover rounded-lg p-4">
-            <div className="text-3xl font-bold text-accent-purple mb-2">85%</div>
-            <div className="text-secondary">Average Score</div>
-          </div>
+      )}
+
+      {!user && (
+        <div className="bg-card rounded-lg p-6 text-center">
+          <p className="text-secondary mb-4">
+            Sign in to register for contests and track your progress
+          </p>
+          <button
+            onClick={() => window.location.href = '/login'}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 transition-colors"
+          >
+            Sign In
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 }

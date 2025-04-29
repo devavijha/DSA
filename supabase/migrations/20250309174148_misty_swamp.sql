@@ -25,7 +25,7 @@ VALUES
       {"input": {"nums": [3, 3], "target": 6}, "output": [0, 1]}
     ]',
     'function twoSum(nums, target) {
-    // Write your code here
+    // Write your code here 
 }'
   ),
   (

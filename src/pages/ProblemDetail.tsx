@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import Editor from '@monaco-editor/react';
@@ -12,7 +13,7 @@ interface Problem {
   difficulty: string;
   category: string;
   solution_template: string;
-  test_cases: any[];
+  test_cases: string;
 }
 
 export default function ProblemDetail() {
@@ -86,10 +87,10 @@ export default function ProblemDetail() {
           <span
             className={
               problem.difficulty.toLowerCase() === 'easy'
-                ? 'text-green-500'
+                ? 'text-accent-green'
                 : problem.difficulty.toLowerCase() === 'medium'
-                ? 'text-yellow-500'
-                : 'text-red-500'
+                ? 'text-accent-yellow'
+                : 'text-accent-red'
             }
           >
             {problem.difficulty}
@@ -120,7 +121,7 @@ export default function ProblemDetail() {
               <button
                 onClick={handleSubmit}
                 disabled={submissionStatus === 'submitting' || !user}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                className="flex items-center gap-2 bg-accent-blue hover:bg-accent-blue/90 text-foreground px-4 py-2 rounded-md disabled:opacity-50"
               >
                 {submissionStatus === 'submitting' ? (
                   'Submitting...'

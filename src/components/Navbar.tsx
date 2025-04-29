@@ -1,11 +1,27 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Brain, Code, LogIn, LogOut, UserCircle, BookOpen, Trophy, Users } from 'lucide-react';
+import { 
+  Brain, 
+  Code, 
+  LogIn, 
+  LogOut, 
+  UserCircle, 
+  BookOpen, 
+  Trophy, 
+  Users, 
+  LucideIcon
+} from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { cn } from '../lib/utils';
 
-const NavLink = ({ to, children, icon: Icon }: { to: string; children: React.ReactNode; icon: any }) => {
+interface NavLinkProps {
+  to: string;
+  children: React.ReactNode;
+  icon: LucideIcon;
+}
+
+const NavLink = ({ to, children, icon: Icon }: NavLinkProps) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
